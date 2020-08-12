@@ -1,47 +1,83 @@
 const express = require('express');
 
+const users = require("../users/userDb")
+const posts = require("../posts/postDb")
+
+const validateUserId = require("../middleware/validateUserId")
+const validateUser = require("../middleware/validateUser")
+const validatePost = require("../middleware/validatePost");
+const { orWhereNotExists } = require('../data/dbConfig');
+
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  // do your magic!
+router.post('/', validateUser(), (req, res) => {
+  users.insert(req.body)
+    .then(user => {
+      res.status(201).json(user)
+    })
+    .catch(error => {
+      next(error)
+    })
 });
 
-router.post('/:id/posts', (req, res) => {
-  // do your magic!
+router.post('/:id/posts', validateUserId(), validatePost(), (req, res) => {
+  posts.insert(req.body)
+  .then(post => {
+    res.status(201).json(post)
+  })
+  .catch(error => {
+    next(error)
+  })
 });
 
 router.get('/', (req, res) => {
-  // do your magic!
+  users.get()
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(error => {
+    next(error)
+  })
 });
 
-router.get('/:id', (req, res) => {
-  // do your magic!
+router.get('/:id', validateUserId(), (req, res) => {
+  users.getById(req.params.id)
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(error => {
+    next(error)
+  })
 });
 
-router.get('/:id/posts', (req, res) => {
-  // do your magic!
+router.get('/:id/posts', validateUserId(), (req, res) => {
+  posts.get()
+  .then(post => {
+    res.status(200).json(post)
+  })
+  .catch(error => {
+    next(error)
+  })
 });
 
-router.delete('/:id', (req, res) => {
-  // do your magic!
+router.delete('/:id', validateUserId(), (req, res) => {
+  users.remove(req.params.id)
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(error => {
+    next(error)
+  })
 });
 
-router.put('/:id', (req, res) => {
-  // do your magic!
+router.put('/:id', validateUserId(), validateUser(), (req, res) => {
+  users.update(req.params.id, req.body)
+  .then(user => {
+    res.status(200).json(user)
+  })
+  .catch(error => {
+    next(error)
+  })
 });
-
-//custom middleware
-
-function validateUserId(req, res, next) {
-  // do your magic!
-}
-
-function validateUser(req, res, next) {
-  // do your magic!
-}
-
-function validatePost(req, res, next) {
-  // do your magic!
-}
 
 module.exports = router;

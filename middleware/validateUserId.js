@@ -14,9 +14,7 @@ function validateUserId() {
             }
         })
         .catch(err => {
-            res.status(500).json({
-                error: "There was an error for the database"
-            })
+            res.status(500).json(err)
         })
     }
 }

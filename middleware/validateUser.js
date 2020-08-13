@@ -13,6 +13,8 @@ function validateUser() {
             })
             next()
         }
+        
+        next()
     }
 }
 

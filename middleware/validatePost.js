@@ -2,7 +2,7 @@ const posts = require("../posts/postDb")
 
 function validatePost() {
     return (req, res, next) => {
-        if (!req.body) {
+        if (!req.body.user_id) {
             res.status(400).json({
                 error: "Missing post data"
             })
@@ -13,6 +13,9 @@ function validatePost() {
             })
             next()
         }
+
+        next()
+        
     }
 }
 
